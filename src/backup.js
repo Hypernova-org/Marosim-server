@@ -14,7 +14,6 @@ const databaseName = process.env.DATABASE_NAME
 
 function backupDatabase() {
   const command = `mongodump --uri="${MONGO_URI}" --out="${BACKUP_PATH}"`;
-
   exec(command, (error, stdout, stderr) => {
     if (error) {
       console.error(error);
@@ -30,7 +29,6 @@ async function zipAndSend() {
   const archive = archiver("zip", {
     zlib: { level: 9 },
   });
-
   output.on("close", function () {
     console.log(
       "Archive created successfully. Total bytes: " + archive.pointer()
@@ -49,9 +47,7 @@ async function zipAndSend() {
   });
 
   archive.pipe(output);
-
   archive.directory(`./backup/${databaseName}/`, false);
-
   archive.finalize();
 }
 

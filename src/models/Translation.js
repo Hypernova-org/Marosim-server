@@ -12,10 +12,7 @@ const TranslationSchema = new mongoose.Schema({
   ru: {
     type: String,
   },
-  kr: {
-    type: String,
-  },
 });
 
-const Translations = mongoose.model("translation", TranslationSchema);
-module.exports = Translations;
+const Translation = mongoose.model("translations", TranslationSchema);
+module.exports = Translation;

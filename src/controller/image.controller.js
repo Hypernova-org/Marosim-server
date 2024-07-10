@@ -1,4 +1,4 @@
-const Images = require("../models/Image");
+const Images = require("../models/Image.js");
 
 exports.getAll = async (req, res) => {
   try {
@@ -27,30 +27,8 @@ exports.uploadImage = async (req, res) => {
     });
     await newImage.save();
     return res.json({
-      id: newImage._doc._id
-    })
-  } catch (err) {
-    return res.status(400).json({
-      message: "Interval server error!",
-      error: err.message,
+      id: newImage._doc._id,
     });
-  }
-};
-
-exports.editImage = async (req, res) => {
-  try {
-    const images = req.images;
-    if (images.length == 0) {
-      return res.status(400).json({
-        message: "Eng kamida 1 ta surat bo'lishi kerak!",
-      });
-    }
-    const findImage = await Images.findById(req.params.id);
-    if (!findImage) {
-      return res.status(404).json({
-        message: "Image Not Found!",
-      });
-    }
   } catch (err) {
     return res.status(400).json({
       message: "Interval server error!",

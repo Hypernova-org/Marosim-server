@@ -10,7 +10,6 @@ exports.getAll = async (req, res) => {
         uz: translation.uz ? translation.uz : null,
         ru: translation.ru ? translation.ru : null,
         en: translation.en ? translation.en : null,
-        kr: translation.kr ? translation.kr : null,
       })),
     });
   } catch (err) {
@@ -44,8 +43,7 @@ exports.search = async (req, res) => {
         { uz: { $regex: regex } },
         { ru: { $regex: regex } },
         { en: { $regex: regex } },
-        { kr: { $regex: regex } }
-      ]
+      ],
     });
 
     return res.json({
@@ -55,8 +53,7 @@ exports.search = async (req, res) => {
         uz: translation.uz ? translation.uz : null,
         ru: translation.ru ? translation.ru : null,
         en: translation.en ? translation.en : null,
-        kr: translation.kr ? translation.kr : null,
-      }))
+      })),
     });
   } catch (err) {
     return res.json(err);
@@ -79,7 +76,7 @@ exports.create = async (req, res) => {
       await createdTranslation.save();
       return res.json(createdTranslation);
     } else {
-      if(!findMessage[lang]) {
+      if (!findMessage[lang]) {
         findMessage[lang] = text;
       }
       await findMessage.save();

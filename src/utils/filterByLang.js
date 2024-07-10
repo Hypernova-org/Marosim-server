@@ -1,16 +1,3 @@
-/*
-    Documentation for use this function
-
-    const { Worker } = require('worker_threads');
-
-    const worker = new Worker('/path/to/filterByLang.js');
-    worker.postMessage({ items: data, lang: 'uz', fields: ['productTitle', 'descriptionUz', 'category.categroyName'] });
-    worker.on('message', (result) => {
-        console.log(result); // or res.json(result)
-    });
-*/
-
-
 const { parentPort } = require('worker_threads');
 
 // Function to filter items based on language and specified fields
