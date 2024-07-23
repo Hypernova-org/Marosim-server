@@ -13,7 +13,7 @@ exports.getMe = async (req, res) => {
     }
     return res.json({
       data: {
-        token: sign(findUser._id),
+        token: sign(findUser._id.toString()),
         username: findUser.username,
       },
     });
