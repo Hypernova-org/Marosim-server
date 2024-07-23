@@ -1,1 +1,1 @@
-marosim server
+waqt server
