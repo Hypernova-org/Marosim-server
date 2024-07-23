@@ -4,6 +4,5 @@ const imageRoutes = Router();
 
 imageRoutes.get("/upload", imageController.getAll);
 imageRoutes.post("/upload", imageController.uploadImage);
-imageRoutes.delete("/upload/:id", imageController.deleteImage);
 
 module.exports = imageRoutes;

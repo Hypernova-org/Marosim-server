@@ -1,12 +1,18 @@
 const { Schema, model } = require("mongoose");
 const categorySchema = new Schema(
   {
-    title: {
+    titleUz: {
       type: String,
+      required: true,
+    },
+    titleRu: {
+      type: String,
+      required: true,
     },
     images: [
       {
         type: String,
+        required: true,
       },
     ],
   },

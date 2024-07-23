@@ -61,23 +61,3 @@ exports.uploadImage = [
     }
   },
 ];
-
-exports.deleteImage = async (req, res) => {
-  try {
-    const image = await Images.findOne({ fileId: req.params.id });
-    if (!image) {
-      return res.status(404).json({
-        message: "Image not found!",
-      });
-    }
-    await Images.deleteOne({ fileId: req.params.id });
-    return res.status(200).json({
-      message: "Image deleted!",
-    });
-  } catch (err) {
-    return res.status(500).json({
-      message: "Internal server error!",
-      error: err.message,
-    });
-  }
-}

@@ -1,9 +1,12 @@
 const Category = require("../models/Category.js");
 const pagination = require("../utils/pagination.js");
+const filterByLang = require("../utils/filterByLang.js");
 
 exports.getAllCategory = async (req, res) => {
   try {
     const categories = await pagination(Category, req.query);
+    const result = filterByLang(categories.data, req.query.lang, "title");
+    categories.data = result;
     return res.json(categories);
   } catch (err) {
     return res.status(500).json({ error: err.message });
