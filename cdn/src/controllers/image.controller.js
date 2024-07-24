@@ -41,7 +41,7 @@ exports.uploadImage = [
       const newImage = new Images({
         filename: req.file.filename,
         fileId: uuidv4(),
-        fileUrl: `http://localhost:3001/uploads/${req.file.filename}`,
+        fileUrl: `https://cdn.waqt.uz/uploads/${req.file.filename}`,
       });
       const savedImage = await newImage.save();
       return res.status(201).json({
@@ -50,7 +50,7 @@ exports.uploadImage = [
         data: {
           fileName: req.file.filename,
           fileId: savedImage.fileId,
-          fileUrl: `http://localhost:3001/uploads/${req.file.filename}`,
+          fileUrl: `https://cdn.waqt.uz/uploads/${req.file.filename}`,
         },
       });
     } catch (err) {
