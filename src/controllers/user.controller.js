@@ -68,12 +68,15 @@ exports.login = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     const { userId } = req.headers;
+    const { username, password } = req.body;
+    const updateData = { username };
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateData.password = hashedPassword;
+    }
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      {
-        username: req.body.username,
-        password: req.body.password,
-      },
+      updateData,
       {
         new: true,
       }
