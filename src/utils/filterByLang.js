@@ -1,12 +1,6 @@
 const filterByLang = (items = [], lang, ...fields) => {
   try {
-    if(!lang) {
-      return {
-        error: "Language is required.",
-      };
-    }
-    const langSuffix =
-      lang.charAt(0).toUpperCase() + lang.slice(1).toLowerCase().trim();
+    const langSuffix = lang.charAt(0).toUpperCase() + lang.slice(1).toLowerCase().trim();
     const result = [];
     for (let item of items) {
       let newItem = { ...(item._doc || item) };
@@ -14,24 +8,33 @@ const filterByLang = (items = [], lang, ...fields) => {
         let fieldPath = field.split(".");
         let currentValue = newItem;
         for (let i = 0; i < fieldPath.length - 1; i++) {
-          currentValue = currentValue[fieldPath[i]];
-          if (currentValue === undefined) {
+          if (currentValue[fieldPath[i]] === undefined) {
+            currentValue = undefined;
             break;
           }
+          currentValue = currentValue[fieldPath[i]];
         }
         if (currentValue !== undefined) {
           const lastKey = fieldPath[fieldPath.length - 1];
-          currentValue[lastKey] =
-            currentValue[`${lastKey}${langSuffix}`] || currentValue[lastKey];
+          if (currentValue[`${lastKey}${langSuffix}`] !== undefined) {
+            if(currentValue._doc) {
+              currentValue = currentValue._doc
+            }
+            currentValue[lastKey] = currentValue[`${lastKey}${langSuffix}`];
+            if(field.includes('.')) {
+              item[field.split('.')[0]] = currentValue;
+            }
+          }
         }
       }
       result.push(newItem);
     }
     return result;
   } catch (err) {
+    console.log(err);
     return {
-      message: err,
-      error: "Error in filtering by language.",
+      message: err.message,
+      error: "Error in filtering by language."
     };
   }
 };
