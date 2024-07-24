@@ -43,17 +43,18 @@ exports.uploadImage = [
         fileId: uuidv4(),
         fileUrl: `https://cdn.waqt.uz/uploads/${req.file.filename}`,
       });
-      const savedImage = await newImage.save();
+      await newImage.save();
       return res.status(201).json({
         message: "File uploaded",
         status: 200,
         data: {
           fileName: req.file.filename,
-          fileId: savedImage.fileId,
+          fileId: newImage.fileId,
           fileUrl: `https://cdn.waqt.uz/uploads/${req.file.filename}`,
         },
       });
     } catch (err) {
+      console.log(err);
       return res.status(500).json({
         message: "Internal server error!",
         error: err.message,
