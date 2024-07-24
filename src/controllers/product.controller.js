@@ -4,10 +4,11 @@ const filterByLang = require("../utils/filterByLang.js");
 
 exports.getAllProduct = async (req, res) => {
   try {
-    const products = await pagination(Product, req.query, "category.title");
+    const products = await pagination(Product, req.query, "category");
     const result = filterByLang(
       products.data,
       req.query.lang,
+      "category.title",
       "title",
       "description"
     );
