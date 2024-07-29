@@ -14,7 +14,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-
 exports.getAll = async (req, res) => {
   try {
     const images = await Images.find();
