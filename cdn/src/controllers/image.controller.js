@@ -1,63 +1,51 @@
-const multer = require("multer");
+const { v1: uuidv4 } = require("uuid");
 const path = require("path");
-const { v4: uuidv4 } = require("uuid");
-const Images = require("../models/Image.js");
+const multer = require("multer");
+const Files = require("../models/Image.js");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = uuidv4() + path.extname(file.originalname);
-    cb(null, uniqueName);
-  },
-});
-
-const upload = multer({ storage: storage });
-exports.getAll = async (req, res) => {
-  try {
-    const images = await Images.find();
-    return res.json({
-      data: images,
-    });
-  } catch (err) {
-    return res.status(400).json({
-      message: "Internal server error!",
-      error: err.message,
-    });
-  }
+exports.index = async (req, res) => {
+  res.json({ message: "Storage Wqat server", version: "1.0.0" });
 };
-
-exports.uploadImage = [
-  upload.single("images"),
-  async (req, res) => {
-    try {
-      if (!req.file) {
-        return res.status(400).json({
-          message: "At least one image is required!",
-        });
+exports.upload = async (req, res) => {
+  try {
+    const publicFolderPath = `./uploads`;
+    const storage = multer.diskStorage({
+      destination: publicFolderPath,
+      filename: (req, file, cb) => {
+        const fileId = uuidv4();
+        const fileExtension = path.extname(file.originalname);
+        const fileName = `${fileId}${fileExtension}`;
+        cb(null, fileName);
+      },
+    });
+    const upload = multer({ storage }).single("images");
+    upload(req, res, async (err) => {
+      if (err) {
+        console.error("Error handling file upload:", err);
+        return res.status(500).json({ message: "Error uploading the file" });
       }
-      const newImage = new Images({
-        filename: req.file.filename,
-        fileId: uuidv4(),
-        fileUrl: `https://cdn.waqt.uz/uploads/${req.file.filename}`,
+      if (!req.file) {
+        return res.status(400).json({ message: "No file provided" });
+      }
+      const fileName = req.file.filename;
+      const fileId = path.basename(
+        req.file.filename,
+        path.extname(req.file.filename)
+      );
+      const fileUrl = `https://cdn.waqt.uz/uploads/${fileName}`;
+      const files = await Files.create({
+        fileName,
+        fileId,
+        fileUrl,
       });
-      await newImage.save();
-      return res.status(201).json({
+      await files.save();
+      return res.status(200).json({
         message: "File uploaded",
         status: 200,
-        data: {
-          fileName: req.file.filename,
-          fileId: newImage.fileId,
-          fileUrl: `https://cdn.waqt.uz/uploads/${req.file.filename}`,
-        },
+        data: files,
       });
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({
-        message: "Internal server error!",
-        error: err.message,
-      });
-    }
-  },
-];
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

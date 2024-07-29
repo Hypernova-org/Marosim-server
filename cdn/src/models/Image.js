@@ -1,21 +1,15 @@
-const { Schema, model } = require("mongoose");
-const ImageSchema = new Schema(
-  {
-    filename: {
-      type: String,
-      required: true,
-    },
-    fileId: {
-      type: String,
-      required: true,
-    },
-    fileUrl: {
-      type: String,
-      required: true,
-    },
+const mongoose = require("mongoose");
+const filesSchema = new mongoose.Schema({
+  fileName: {
+    type: String,
   },
-  { timestamps: true }
-);
-
-const Images = model("images", ImageSchema);
-module.exports = Images;
+  fileId: {
+    type: String,
+  },
+  fileUrl: {
+    type: String,
+  },
+});
+filesSchema.set("timestamps", true);
+const Files = mongoose.model("images", filesSchema);
+module.exports = Files;
