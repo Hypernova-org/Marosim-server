@@ -3,9 +3,38 @@ const path = require("path");
 const multer = require("multer");
 const Files = require("../models/Image.js");
 
-exports.index = async (req, res) => {
-  res.json({ message: "Storage Wqat server", version: "1.0.0" });
+exports.getFiles = async (req, res) => {
+  try {
+    const files = await Files.find();
+    return res.status(200).json({
+      message: "Files fetched",
+      status: 200,
+      data: files,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
+
+exports.deleteFile = async (req, res) => {
+  try {
+    const fileId = req.params.fileId;
+    const file = await Files.findOne({
+      fileId,
+    });
+    if (!file) {
+      return res.status(404).json({ message: "File not found" });
+    }
+    await Files.findByIdAndDelete(file._id);
+    return res.status(200).json({
+      message: "File deleted",
+      status: 200,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 exports.upload = async (req, res) => {
   try {
     const publicFolderPath = `./uploads`;
