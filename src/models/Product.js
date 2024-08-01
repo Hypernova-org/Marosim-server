@@ -26,6 +26,9 @@ const productSchema = new Schema(
       ref: "categories",
       required: true,
     },
+    gender: {
+      type: Boolean,
+    },
     images: [
       {
         url: {
