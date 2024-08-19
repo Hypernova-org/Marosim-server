@@ -6,7 +6,7 @@ dotenv.config();
 require("./src/backup.js");
 require("./src/connection.js");
 const routes = require("./src/routes/router.js");
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 const app = express();
 app.use(express.json());
