@@ -27,7 +27,7 @@ const productSchema = new Schema(
       required: true,
     },
     gender: {
-      type: Number,
+      type: Boolean,
     },
     images: [
       {
