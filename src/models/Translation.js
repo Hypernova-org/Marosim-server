@@ -9,6 +9,9 @@ const TranslationSchema = new Schema({
   ru: {
     type: String,
   },
+  kr: {
+    type: String,
+  },
 });
 
 const Translations = model("translations", TranslationSchema);

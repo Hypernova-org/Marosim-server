@@ -9,6 +9,10 @@ const categorySchema = new Schema(
       type: String,
       required: true,
     },
+    titleKr: {
+      type: String,
+      required: true,
+    },
     images: [
       {
         url: {

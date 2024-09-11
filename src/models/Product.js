@@ -9,11 +9,19 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
+    titleKr: {
+      type: String,
+      required: true,
+    },
     descriptionUz: {
       type: String,
       required: true,
     },
     descriptionRu: {
+      type: String,
+      required: true,
+    },
+    descriptionKr: {
       type: String,
       required: true,
     },
