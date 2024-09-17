@@ -9,14 +9,13 @@ exports.getAll = async (req, res) => {
         message: translation.message,
         uz: translation.uz ? translation.uz : null,
         ru: translation.ru ? translation.ru : null,
-        en: translation.en ? translation.en : null,
         kr: translation.kr ? translation.kr : null,
       })),
     });
-  } catch (err) {
+  } catch (error) {
     return res.status(400).json({
       message: "Interval server error",
-      error: err.message
+      error: error.message,
     });
   }
 };
@@ -32,10 +31,10 @@ exports.findByLang = async (req, res) => {
     });
     result.push(obj);
     return res.json(result[0]);
-  } catch (err) {
+  } catch (error) {
     return res.status(400).json({
       message: "Interval server error",
-      error: err.message
+      error: error.message,
     });
   }
 };
@@ -44,31 +43,27 @@ exports.search = async (req, res) => {
   try {
     const { message } = req.params;
     const regex = new RegExp(message, "i");
-
     const translations = await Translations.find({
       $or: [
         { uz: { $regex: regex } },
         { ru: { $regex: regex } },
-        { en: { $regex: regex } },
         { kr: { $regex: regex } },
         { message: { $regex: regex } },
-      ]
+      ],
     });
-
     return res.json({
       data: translations.map((translation) => ({
         id: translation._id,
         message: translation.message,
         uz: translation.uz ? translation.uz : null,
         ru: translation.ru ? translation.ru : null,
-        en: translation.en ? translation.en : null,
         kr: translation.kr ? translation.kr : null,
-      }))
+      })),
     });
-  } catch (err) {
+  } catch (error) {
     return res.status(400).json({
       message: "Interval server error",
-      error: err.message
+      error: error.message,
     });
   }
 };
@@ -78,29 +73,23 @@ exports.create = async (req, res) => {
     const { lang } = req.params;
     const message = Object.values(req.body)[0];
     const text = Object.values(req.body)[0];
-    const findMessage = await Translations.findOne({
-      message: message,
-    });
-    console.log(text, lang);
-    
+    const findMessage = await Translations.findOne({ message: message });
     if (!findMessage) {
-      const createdTranslation = new Translations({
-        message: message,
-      });
+      const createdTranslation = new Translations({ message: message });
       createdTranslation[lang] = text;
       await createdTranslation.save();
       return res.json(createdTranslation);
     } else {
-      if(!findMessage[lang]) {
+      if (!findMessage[lang]) {
         findMessage[lang] = text;
       }
       await findMessage.save();
       return res.json(findMessage);
     }
-  } catch (err) {
+  } catch (error) {
     return res.status(400).json({
       message: "Interval server error",
-      error: err.message
+      error: error.message,
     });
   }
 };
@@ -115,11 +104,11 @@ exports.update = async (req, res) => {
     }
     findTranslation[lang] = translation;
     await findTranslation.save();
-    res.json(findTranslation);
-  } catch (err) {
+    return res.json(findTranslation);
+  } catch (error) {
     return res.status(400).json({
       message: "Interval server error",
-      error: err.message
+      error: error.message,
     });
   }
 };
